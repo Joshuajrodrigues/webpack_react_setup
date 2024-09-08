@@ -4,8 +4,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
 
-module.exports = (env) => {
-    console.log("webpack env", env);
+module.exports = (env, args) => {
+    console.log("webpack env", env, args);
+
+    const PORT = args.port
+
+    const isDev = args.mode === "development"
 
     return {
         entry: {
@@ -15,6 +19,8 @@ module.exports = (env) => {
         output: {
             filename: '[name].[contenthash].js',
             path: path.resolve(__dirname, 'dist'),
+            publicPath: '/',
+            pathinfo: false,
             clean: true
         },
         externals: {
@@ -46,7 +52,7 @@ module.exports = (env) => {
             new HtmlWebpackPlugin({
                 template: './public/index.html',
                 templateParameters: {
-                    scripts: scriptsToLoad(true)
+                    scripts: scriptsToLoad(isDev)
                 },
                 filename: 'index.html',
                 chunks: ['portal']
@@ -54,7 +60,7 @@ module.exports = (env) => {
             new HtmlWebpackPlugin({
                 template: './public/dashboard.html',
                 templateParameters: {
-                    scripts: scriptsToLoad(true)
+                    scripts: scriptsToLoad(isDev)
                 },
                 filename: 'dashboard.html',
                 chunks: ['dashboard'], // Only include the dashboard bundle
@@ -62,7 +68,7 @@ module.exports = (env) => {
         ],
         devServer: {
             static: path.resolve(__dirname, 'dist'),
-            port: 3000,
+            port: PORT,
             open: true
         }
 
