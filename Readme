@@ -1,3 +1,13 @@
-add typescript
-add externals
-convert to vite
+# Webpack React Boilerplate
+
+
+Old school way of making react app but for the new react 18.
+
+Webpack split into common dev and production
+
+Project has 2 entry points dashboard (admin) and portal (index)
+
+Todo : 
+- Github actions CI
+- Express server for deployment
+- Dockerize
