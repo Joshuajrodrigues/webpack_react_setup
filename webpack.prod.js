@@ -2,7 +2,7 @@ const { merge } = require('webpack-merge');
 const webpackCommon = require('./webpack.common')
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
-
+const CopyPlugin = require('copy-webpack-plugin')
 module.exports = (env, args) => {
     return merge(webpackCommon(env, args), {
         mode: 'production',
@@ -27,6 +27,12 @@ module.exports = (env, args) => {
         plugins: [
             new MiniCssExtractPlugin({
                 filename: "[name].[contenthash].css"
+            }),
+            new CopyPlugin({
+                patterns: [
+                    { from: './server/server.js', to: '' },
+                    { from: './server/package.json', to: '' }
+                ]
             })
         ],
         optimization: {
