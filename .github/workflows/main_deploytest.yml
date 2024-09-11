@@ -44,8 +44,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build.zip
+      - name: Azure Login
+        uses: Azure/login@v2.1.1
       - name: Deploy to Azure Web Apps
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v2     
         with:
           app-name: ${{ secrets.PROD_APP }}
           slot-name: production
