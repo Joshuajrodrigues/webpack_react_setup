@@ -22,8 +22,6 @@ jobs:
           corepack prepare pnpm@latest-8 --activate
       - name: Install dependencies
         run: pnpm install
-      - name: Activate Syncfusion License
-        run: npx syncfusion-license activate
       - name: Build for Production
         run: pnpm production
       - name: Zip the build directory
