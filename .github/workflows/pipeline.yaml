@@ -1,0 +1,35 @@
+name: Deployment
+run-name: ${{github.actor}} is deploying.
+on:
+  push:
+    branches:
+      - master
+      - develop
+    workflow_dispatch:
+jobs:
+  build_master:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Set up pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest-8 --activate
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build for Production
+        run: pnpm build
+      - name: Zip the build directory
+        run: |
+          cd dist
+          sudo apt-get update && sudo apt-get install --yes zip
+          zip -r build.zip .
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build.zip
+          path: dist/build.zip
