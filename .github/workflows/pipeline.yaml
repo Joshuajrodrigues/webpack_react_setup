@@ -3,12 +3,12 @@ run-name: ${{github.actor}} is deploying.
 on:
   push:
     branches:
-      - master
+      - main
       - develop
     workflow_dispatch:
 jobs:
   build_master:
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
