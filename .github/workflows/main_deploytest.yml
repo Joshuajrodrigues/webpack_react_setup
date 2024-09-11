@@ -36,7 +36,7 @@ jobs:
           path: dist/build.zip
 
   deploy-master:
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: build-master
     steps:
@@ -52,92 +52,4 @@ jobs:
           publish-profile: ${{ secrets.AZURE_WEBAPPS_PUBLISH_PROFILE }}
           package: dist/build.zip
 
-  build-develop:
-    if: github.ref == 'refs/heads/develop'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      - name: Set up pnpm
-        run: |
-          corepack enable
-          corepack prepare pnpm@latest-8 --activate
-      - name: Install dependencies
-        run: pnpm install
-      - name: Activate Syncfusion License
-        run: npx syncfusion-license activate
-      - name: Build for Staging
-        run: pnpm staging
-      - name: Zip the build directory
-        run: |
-          cd dist
-          sudo apt-get update && sudo apt-get install --yes zip
-          zip -r build.zip .
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: build.zip
-          path: dist/build.zip
-
-  deploy-develop:
-    if: github.ref == 'refs/heads/develop'
-    runs-on: ubuntu-latest
-    needs: build-develop
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: build.zip
-      - name: Deploy to Azure Web Apps (Staging)
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ secrets.STAGING_APP }}
-          slot-name: staging
-          publish-profile: ${{ secrets.AZURE_WEBAPPS_PUBLISH_PROFILE }}
-          package: dist/build.zip
-
-  build-release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      - name: Set up pnpm
-        run: |
-          corepack enable
-          corepack prepare pnpm@latest-8 --activate
-      - name: Install dependencies
-        run: pnpm install
-      - name: Activate Syncfusion License
-        run: npx syncfusion-license activate
-      - name: Build for Release
-        run: pnpm release
-      - name: Zip the build directory
-        run: |
-          cd dist
-          sudo apt-get update && sudo apt-get install --yes zip
-          zip -r build.zip .
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: build.zip
-          path: dist/build.zip
-
-  deploy-release:
-    runs-on: ubuntu-latest
-    needs: build-release
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: build.zip
-      - name: Deploy to Azure Web Apps (Release)
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ secrets.RELEASE_APP }}
-          slot-name: release
-          publish-profile: ${{ secrets.AZURE_WEBAPPS_PUBLISH_PROFILE }}
-          package: dist/build.zip
+  
