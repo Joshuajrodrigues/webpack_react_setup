@@ -10,7 +10,7 @@ const PortalNAvbar = () => {
     <Navbar>
       <NavbarTitle>
         <NavLink to={'/'}>
-          Welcome to portal
+          Welcome to React app
         </NavLink>
       </NavbarTitle>
       <NavbarLinksContainer>
