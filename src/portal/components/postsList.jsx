@@ -20,6 +20,9 @@ const PostsList = () => {
                     <Link to={'/post/3'}>Post 3</Link>
                 </li>
             </ul>
+            <p>
+                Deployement on Azure using web app
+            </p>
         </div>
     )
 }
